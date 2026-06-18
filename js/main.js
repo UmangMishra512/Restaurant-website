@@ -1,3 +1,8 @@
+// --- SUPABASE CONFIGURATION ---
+const SUPABASE_URL = 'https://fvalanmygolufcclltrp.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2YWxhbm15Z29sdWZjY2xsdHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3ODQ1MjQsImV4cCI6MjA5NzM2MDUyNH0.vC_j1NP2kC2asH8r0qP2DlWc7nlONeFq_md3xVtNF-0';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Mobile Menu Toggle
     const mobileBtn = document.querySelector('.mobile-menu-btn');
@@ -110,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Reservation Form Submission with Validation
     const resForm = document.getElementById('reservationForm');
     if (resForm) {
-        resForm.addEventListener('submit', (e) => {
+        resForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             clearAllErrors();
 
@@ -171,15 +176,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError('resGuests', 'guestsError');
             }
 
-            // If all valid, send to WhatsApp
+            // If all valid, save to Supabase and send to WhatsApp
             if (isValid) {
-                // Format date nicely
+                // Change button text to show loading
+                const submitBtn = resForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.textContent = 'Booking...';
+                submitBtn.disabled = true;
+
+                // 1. Save to Supabase
+                const { error } = await supabase
+                    .from('reservations')
+                    .insert([
+                        {
+                            customer_name: name,
+                            phone_number: phone,
+                            reservation_date: date,
+                            reservation_time: time,
+                            guests: guests,
+                            special_requests: requests
+                        }
+                    ]);
+
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
+
+                if (error) {
+                    console.error('Error saving reservation:', error);
+                    alert('There was an error saving your reservation. Please try again.');
+                    return; // Stop if database save fails
+                }
+
+                // 2. Format nicely for WhatsApp
                 const dateObj = new Date(date + 'T00:00:00');
                 const formattedDate = dateObj.toLocaleDateString('en-IN', {
                     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
                 });
 
-                // Format time nicely
                 const [hours, minutes] = time.split(':');
                 const timeObj = new Date();
                 timeObj.setHours(parseInt(hours), parseInt(minutes));
@@ -200,6 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const whatsappNumber = '918986056280';
                 const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+                
+                // Show success to user and clear form
+                resForm.reset();
                 window.open(whatsappURL, '_blank');
             }
         });
