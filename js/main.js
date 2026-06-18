@@ -302,5 +302,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError('resName', 'nameError');
             }
         });
-    }
 });
