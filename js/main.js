@@ -1,7 +1,7 @@
 // --- SUPABASE CONFIGURATION ---
 const SUPABASE_URL = 'https://fvalanmygolufcclltrp.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2YWxhbm15Z29sdWZjY2xsdHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3ODQ1MjQsImV4cCI6MjA5NzM2MDUyNH0.vC_j1NP2kC2asH8r0qP2DlWc7nlONeFq_md3xVtNF-0';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Mobile Menu Toggle
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.disabled = true;
 
                 // 1. Save to Supabase
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('reservations')
                     .insert([
                         {

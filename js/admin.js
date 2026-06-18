@@ -4,7 +4,7 @@ const SUPABASE_URL = 'https://fvalanmygolufcclltrp.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2YWxhbm15Z29sdWZjY2xsdHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3ODQ1MjQsImV4cCI6MjA5NzM2MDUyNH0.vC_j1NP2kC2asH8r0qP2DlWc7nlONeFq_md3xVtNF-0';
 
 // Initialize Supabase Client
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
     // UI Elements
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AUTHENTICATION ---
     async function checkSession() {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabaseClient.auth.getSession();
         if (session) {
             showDashboard();
         } else {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginError.textContent = 'Logging in...';
         loginError.classList.add('show');
         
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: email,
             password: password
         });
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     logoutBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        await supabase.auth.signOut();
+        await supabaseClient.auth.signOut();
         showAuth();
     });
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
         
         // Fetch all reservations ordered by date descending
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('reservations')
             .select('*')
             .order('reservation_date', { ascending: false })
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global function for buttons
     window.updateStatus = async function(id, newStatus) {
         if(confirm(`Are you sure you want to mark this reservation as ${newStatus}?`)) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('reservations')
                 .update({ status: newStatus })
                 .eq('id', id);
