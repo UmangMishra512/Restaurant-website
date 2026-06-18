@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Sky Cafe Full Menu - Explore our complete menu with prices. Pizza, Biryani, Chinese, Shakes, and more starting from ₹29.">
+    <title>Menu | The Sky Cafe - Rooftop Cafe in Patna</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="canonical" href="https://theskycafe.in/menu.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Menu Page Specific Styles */
+        .menu-hero {
+            padding: 140px 0 60px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+        }
+        .menu-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #d4af37;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        .menu-hero p {
+            color: #d0d0d0;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
+        .menu-hero .divider {
+            width: 80px;
+            height: 3px;
+            background: #d4af37;
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+        .menu-page-section {
+            padding: 60px 0 100px;
+            background: rgba(0,0,0,0.4);
+        }
+        .menu-legend {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: #d0d0d0;
+        }
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .legend-dot.veg { border: 2px solid #51cf66; }
+        .legend-dot.veg::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #51cf66; }
+        .legend-dot.nonveg { border: 2px solid #ff6b6b; }
+        .legend-dot.nonveg::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #ff6b6b; }
+
+        .menu-category {
+            margin-bottom: 50px;
+        }
+        .category-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #d4af37;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 25px;
+        }
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        .menu-item-row:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+        .item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .item-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .item-indicator.veg { border: 1.5px solid #51cf66; }
+        .item-indicator.veg::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #51cf66; }
+        .item-indicator.nonveg { border: 1.5px solid #ff6b6b; }
+        .item-indicator.nonveg::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #ff6b6b; }
+
+        .item-name {
+            color: #f5f5f5;
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+        .item-price {
+            color: #d4af37;
+            font-weight: 600;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+        .menu-footer-note {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .menu-footer-note p {
+            color: #a3a3a3;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .menu-footer-note .cta-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f5f5f5;
+            margin: 25px 0 20px;
+        }
+        @media (max-width: 768px) {
+            .menu-hero h1 { font-size: 2.5rem; }
+            .menu-item-row { padding: 12px 10px; }
+            .item-name { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">The Sky Cafe</a>
+            <div class="nav-links">
+                <a href="index.html#about">About</a>
+                <a href="menu.html" style="color: #d4af37;">Menu</a>
+                <a href="index.html#gallery">Gallery</a>
+                <a href="index.html#reviews">Reviews</a>
+                <a href="index.html#events">Events</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+            <a href="index.html#reserve" class="btn btn-primary nav-cta">Reserve a Table</a>
+            <div class="mobile-menu-btn">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="menu-hero">
+        <div class="container">
+            <h1>Our <span style="color:#ffdf73;">Menu</span></h1>
+            <p>Crafted with love, served with pride. Explore our complete offerings.</p>
+            <div class="divider"></div>
+        </div>
+    </section>
+
+    <!-- Full Menu -->
+    <section class="menu-page-section">
+        <div class="container">
+            <!-- Legend -->
+            <div class="menu-legend">
+                <div class="legend-item"><div class="legend-dot veg"></div> Vegetarian</div>
+                <div class="legend-item"><div class="legend-dot nonveg"></div> Non-Vegetarian</div>
+            </div>
+
+            <!-- Pizza -->
+            <div class="menu-category">
+                <h2 class="category-header">🍕 Pizza</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Margherita Pizza</span></div><span class="item-price">₹129</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Cheese Burst Pizza</span></div><span class="item-price">₹169</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Paneer Tikka Pizza</span></div><span class="item-price">₹179</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Chicken Tikka Pizza</span></div><span class="item-price">₹189</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Farm Fresh Veggie Pizza</span></div><span class="item-price">₹149</span></div>
+            </div>
+
+            <!-- Starters -->
+            <div class="menu-category">
+                <h2 class="category-header">🍗 Starters & Appetizers</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Chicken Lollipop (6 pcs)</span></div><span class="item-price">₹169</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Drums of Heaven (6 pcs)</span></div><span class="item-price">₹179</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Chicken Chilly</span></div><span class="item-price">₹159</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Chilli Paneer</span></div><span class="item-price">₹139</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Crispy Corn</span></div><span class="item-price">₹99</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">French Fries</span></div><span class="item-price">₹79</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Paneer Tikka</span></div><span class="item-price">₹149</span></div>
+            </div>
+
+            <!-- Chinese -->
+            <div class="menu-category">
+                <h2 class="category-header">🍜 Chinese & Noodles</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Hakka Noodles (Veg)</span></div><span class="item-price">₹109</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Hakka Noodles (Chicken)</span></div><span class="item-price">₹139</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Fried Rice (Veg)</span></div><span class="item-price">₹109</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Fried Rice (Chicken)</span></div><span class="item-price">₹139</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Manchurian (Veg)</span></div><span class="item-price">₹119</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Chow Mein</span></div><span class="item-price">₹99</span></div>
+            </div>
+
+            <!-- Biryani -->
+            <div class="menu-category">
+                <h2 class="category-header">🍛 Biryani & Rice</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Chicken Biryani</span></div><span class="item-price">₹169</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Mutton Biryani</span></div><span class="item-price">₹199</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Paneer Biryani</span></div><span class="item-price">₹139</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Egg Biryani</span></div><span class="item-price">₹129</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Jeera Rice</span></div><span class="item-price">₹79</span></div>
+            </div>
+
+            <!-- Quick Bites -->
+            <div class="menu-category">
+                <h2 class="category-header">🍝 Quick Bites</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Cheese Maggi</span></div><span class="item-price">₹79</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Masala Maggi</span></div><span class="item-price">₹59</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Garlic Bread</span></div><span class="item-price">₹89</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Veg Sandwich</span></div><span class="item-price">₹69</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator nonveg"></div><span class="item-name">Chicken Sandwich</span></div><span class="item-price">₹99</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Pasta (White Sauce)</span></div><span class="item-price">₹119</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Pasta (Red Sauce)</span></div><span class="item-price">₹109</span></div>
+            </div>
+
+            <!-- Beverages -->
+            <div class="menu-category">
+                <h2 class="category-header">🥤 Beverages & Shakes</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Cold Coffee</span></div><span class="item-price">₹89</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Chocolate Shake</span></div><span class="item-price">₹99</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Oreo Shake</span></div><span class="item-price">₹109</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">KitKat Shake</span></div><span class="item-price">₹109</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Strawberry Shake</span></div><span class="item-price">₹99</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Sweet Lime Soda</span></div><span class="item-price">₹49</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Fresh Lime Water</span></div><span class="item-price">₹39</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Masala Chai</span></div><span class="item-price">₹29</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Green Tea</span></div><span class="item-price">₹39</span></div>
+            </div>
+
+            <!-- Desserts -->
+            <div class="menu-category">
+                <h2 class="category-header">🍨 Desserts</h2>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Brownie with Ice Cream</span></div><span class="item-price">₹129</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Gulab Jamun (2 pcs)</span></div><span class="item-price">₹49</span></div>
+                <div class="menu-item-row"><div class="item-left"><div class="item-indicator veg"></div><span class="item-name">Ice Cream Sundae</span></div><span class="item-price">₹99</span></div>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="menu-footer-note">
+                <p>Prices are inclusive of all taxes. Menu items and prices are subject to change.</p>
+                <p class="cta-text">Can't decide? Visit us and let our chef surprise you!</p>
+                <a href="index.html#reserve" class="btn btn-primary">Reserve a Table</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h2>The Sky Cafe</h2>
+                <p>Patna's favorite destination for premium rooftop dining.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="index.html#gallery">Gallery</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms & Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 The Sky Cafe. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/918986056280?text=Hello%20The%20Sky%20Cafe!" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

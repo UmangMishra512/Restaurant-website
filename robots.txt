@@ -1,0 +1,5 @@
+# robots.txt for The Sky Cafe
+User-agent: *
+Allow: /
+
+Sitemap: https://theskycafe.in/sitemap.xml
