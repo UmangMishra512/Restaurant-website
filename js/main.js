@@ -176,67 +176,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError('resGuests', 'guestsError');
             }
 
-            // If all valid, save to Supabase and send to WhatsApp
+            // If all valid, trigger UPI Payment Modal
             if (isValid) {
-                // Change button text to show loading
-                const submitBtn = resForm.querySelector('button[type="submit"]');
-                const originalBtnText = submitBtn.textContent;
-                submitBtn.textContent = 'Booking...';
-                submitBtn.disabled = true;
-
-                // 1. Save to Supabase
-                const { error } = await supabaseClient
-                    .from('reservations')
-                    .insert([
-                        {
-                            customer_name: name,
-                            phone_number: phone,
-                            reservation_date: date,
-                            reservation_time: time,
-                            guests: guests,
-                            special_requests: requests
-                        }
-                    ]);
-
-                submitBtn.textContent = originalBtnText;
-                submitBtn.disabled = false;
-
-                if (error) {
-                    console.error('Error saving reservation:', error);
-                    alert('There was an error saving your reservation. Please try again.');
-                    return; // Stop if database save fails
-                }
-
-                // 2. Format nicely for WhatsApp
-                const dateObj = new Date(date + 'T00:00:00');
-                const formattedDate = dateObj.toLocaleDateString('en-IN', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                });
-
-                const [hours, minutes] = time.split(':');
-                const timeObj = new Date();
-                timeObj.setHours(parseInt(hours), parseInt(minutes));
-                const formattedTime = timeObj.toLocaleTimeString('en-IN', {
-                    hour: '2-digit', minute: '2-digit', hour12: true
-                });
-
-                const message = encodeURIComponent(
-                    `Hello The Sky Cafe! I would like to reserve a table.\n\n` +
-                    `*Name:* ${name}\n` +
-                    `*Phone:* ${phone}\n` +
-                    `*Date:* ${formattedDate}\n` +
-                    `*Time:* ${formattedTime}\n` +
-                    `*Guests:* ${guests}\n` +
-                    `*Special Requests:* ${requests || 'None'}\n\n` +
-                    `Please confirm my booking. Thank you!`
-                );
-
-                const whatsappNumber = '918986056280';
-                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+                // --- UPI CONFIGURATION ---
+                const upiID = 'theskycafe@upi'; // The user can easily change this
+                const bookingAmount = '100'; // Booking fee
+                const payeeName = 'The Sky Cafe';
                 
-                // Show success to user and clear form
-                resForm.reset();
-                window.open(whatsappURL, '_blank');
+                // Generate UPI Intent Link and QR Code
+                const upiUrl = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${bookingAmount}&cu=INR&tn=Table Booking`;
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+
+                // Setup Modal UI
+                const modal = document.getElementById('paymentModal');
+                document.getElementById('paymentAmountDisplay').textContent = `₹${bookingAmount}`;
+                document.getElementById('upiQrCode').src = qrUrl;
+                document.getElementById('payUpiBtn').href = upiUrl;
+
+                // Show Modal
+                modal.classList.add('active');
+
+                // Handle "I have made the payment" click
+                const doneBtn = document.getElementById('paymentDoneBtn');
+                
+                // Clone node to remove old event listeners if user opens modal multiple times
+                const newDoneBtn = doneBtn.cloneNode(true);
+                doneBtn.parentNode.replaceChild(newDoneBtn, doneBtn);
+                
+                newDoneBtn.addEventListener('click', async () => {
+                    newDoneBtn.textContent = 'Processing...';
+                    newDoneBtn.disabled = true;
+
+                    // 1. Save to Supabase with "Payment Pending" status
+                    const { error } = await supabaseClient
+                        .from('reservations')
+                        .insert([
+                            {
+                                customer_name: name,
+                                phone_number: phone,
+                                reservation_date: date,
+                                reservation_time: time,
+                                guests: guests,
+                                special_requests: requests,
+                                status: 'Payment Pending'
+                            }
+                        ]);
+
+                    if (error) {
+                        console.error('Error saving reservation:', error);
+                        alert('Database error. Please contact us directly.');
+                        newDoneBtn.textContent = 'I Have Made the Payment';
+                        newDoneBtn.disabled = false;
+                        return;
+                    }
+
+                    // Success!
+                    modal.classList.remove('active');
+                    resForm.reset();
+                    
+                    // Show a nice success message
+                    const successMsg = document.createElement('div');
+                    successMsg.style.cssText = "background: #111; border: 1px solid #d4af37; color: #d4af37; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center;";
+                    successMsg.innerHTML = "<strong>Reservation Request Received!</strong><br>We will verify your payment and send a confirmation shortly.";
+                    resForm.innerHTML = ''; // Clear form UI
+                    resForm.appendChild(successMsg);
+                });
+
+                // Handle Cancel button
+                document.getElementById('cancelPaymentBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.classList.remove('active');
+                });
             }
         });
 
