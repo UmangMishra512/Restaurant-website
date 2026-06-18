@@ -106,6 +106,7 @@
                 <a href="#reviews">Reviews</a>
                 <a href="#events">Events</a>
                 <a href="#contact">Contact</a>
+                <a href="admin.html" class="admin-nav-link">Admin Login</a>
             </div>
             <a href="#reserve" class="btn btn-primary nav-cta">Reserve a Table</a>
             <div class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
@@ -332,62 +333,23 @@
     </section>
 
     <!-- 7. Reserve a Table & 8. Event Booking -->
-    <section class="booking-section section-padding" id="reserve">
-        <div class="container booking-container">
-            <div class="booking-info scroll-reveal">
-                <h2 class="section-title">Book Your Experience</h2>
-                <p>Planning a special day? Secure your table easily.</p>
+    <section class="booking-section section-padding" id="reserve" style="text-align: center;">
+        <div class="container booking-container" style="justify-content: center;">
+            <div class="booking-info scroll-reveal" style="max-width: 600px;">
+                <h2 class="section-title">Host Your Events With Us</h2>
+                <p>Planning a special day? We offer customized decorations and special menus for bulk bookings!</p>
                 
-                <div class="events-box" id="events">
-                    <h3>Host Your Events With Us</h3>
-                    <ul class="event-list">
+                <div class="events-box" id="events" style="text-align: left; margin: 30px auto;">
+                    <ul class="event-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <li>🎂 Birthday Parties</li>
                         <li>💍 Anniversary Celebrations</li>
                         <li>💼 Corporate Meetups</li>
                         <li>🥂 Friends Gatherings</li>
                     </ul>
-                    <p class="event-note">We offer customized decorations and special menus for bulk bookings!</p>
-                    <a href="https://wa.me/918986056280?text=Hello%20The%20Sky%20Cafe!%20I%20am%20interested%20in%20booking%20an%20event.%20Please%20share%20the%20details." class="btn btn-outline" style="margin-top: 15px;" id="event-inquiry-btn" target="_blank" rel="noopener">Enquire About Events</a>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="https://wa.me/918986056280?text=Hello%20The%20Sky%20Cafe!%20I%20am%20interested%20in%20booking%20an%20event.%20Please%20share%20the%20details." class="btn btn-primary btn-full" id="event-inquiry-btn" target="_blank" rel="noopener">Enquire About Events</a>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="booking-form-wrapper scroll-reveal delay-1">
-                <form id="reservationForm" class="booking-form" novalidate>
-                    <h3>Reserve a Table</h3>
-                    <div class="form-group">
-                        <input type="text" id="resName" placeholder="Your Name" required minlength="2" maxlength="100" aria-label="Your Name">
-                        <span class="error-msg" id="nameError"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" id="resPhone" placeholder="Phone Number (10 digits)" required pattern="[6-9][0-9]{9}" maxlength="10" aria-label="Phone Number">
-                        <span class="error-msg" id="phoneError"></span>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="date" id="resDate" required aria-label="Reservation Date">
-                            <span class="error-msg" id="dateError"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="time" id="resTime" required min="11:00" max="22:30" aria-label="Reservation Time">
-                            <span class="error-msg" id="timeError"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <select id="resGuests" required aria-label="Number of Guests">
-                            <option value="" disabled selected>Number of Guests</option>
-                            <option value="1-2">1-2 Guests</option>
-                            <option value="3-5">3-5 Guests</option>
-                            <option value="6-10">6-10 Guests</option>
-                            <option value="10+">10+ Guests (Party)</option>
-                        </select>
-                        <span class="error-msg" id="guestsError"></span>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="resRequests" placeholder="Special Requests (Optional)" aria-label="Special Requests"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full" id="submit-reservation">Book via WhatsApp</button>
-                    <p class="form-disclaimer">By booking, you agree to our <a href="privacy.html">Privacy Policy</a> & <a href="terms.html">Terms</a>.</p>
-                </form>
             </div>
         </div>
     </section>
@@ -470,7 +432,6 @@
         <div class="footer-bottom">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
                 <p>&copy; 2026 The Sky Cafe. All Rights Reserved. | <a href="tel:+918986056280">+91 89860 56280</a></p>
-                <a href="admin.html" style="color: rgba(255,255,255,0.2); font-size: 0.8rem; text-decoration: none;">Admin Login</a>
             </div>
         </div>
     </footer>
@@ -482,27 +443,60 @@
         </svg>
     </a>
 
-    <!-- Payment Modal -->
-    <div class="payment-modal-overlay" id="paymentModal">
-        <div class="payment-modal-content">
-            <h2 class="payment-title">Complete Reservation</h2>
-            <p class="payment-subtitle">Please pay the booking advance of <strong id="paymentAmountDisplay">₹100</strong> to confirm your table.</p>
+    <!-- Reservation Modal -->
+    <div class="payment-modal-overlay" id="reservationModal">
+        <div class="payment-modal-content" style="max-width: 500px; padding: 30px;">
+            <button id="closeReservationBtn" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h2 class="payment-title" style="margin-bottom: 20px;">Reserve a Table</h2>
             
-            <div class="qr-code-container">
-                <img id="upiQrCode" src="" alt="UPI QR Code" loading="lazy">
-                <p class="scan-text">Scan with any UPI App (GPay, PhonePe, Paytm)</p>
-            </div>
-            
-            <p class="or-text">OR</p>
-            
-            <a href="#" id="payUpiBtn" class="btn btn-primary btn-full" style="margin-bottom: 15px;">Pay via UPI App</a>
-            
-            <button id="paymentDoneBtn" class="btn btn-outline btn-full">I Have Made the Payment</button>
-            <button id="cancelPaymentBtn" class="payment-cancel">Cancel Reservation</button>
+            <form id="newReservationForm" novalidate style="text-align: left;">
+                <div id="step1">
+                    <p class="payment-subtitle" style="text-align: center;">Enter your details</p>
+                    <div class="form-group"><input type="text" id="resName" placeholder="Full Name" required></div>
+                    <div class="form-group"><input type="tel" id="resPhone" placeholder="Mobile Number (10 digits)" required pattern="[6-9][0-9]{9}"></div>
+                    <div class="form-group"><input type="email" id="resEmail" placeholder="Email Address (Optional)"></div>
+                    <div class="form-row">
+                        <div class="form-group"><input type="date" id="resDate" required></div>
+                        <div class="form-group"><input type="time" id="resTime" required min="11:00" max="22:30"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="resGuests" required>
+                            <option value="" disabled selected>Number of Guests</option>
+                            <option value="1-2">1-2 Guests</option>
+                            <option value="3-4">3-4 Guests</option>
+                            <option value="5-6">5-6 Guests</option>
+                            <option value="7+">7+ Guests (Party)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><textarea id="resRequests" placeholder="Special Requests (Optional)"></textarea></div>
+                    <button type="button" id="checkAvailabilityBtn" class="btn btn-primary btn-full">Check Availability</button>
+                </div>
+                
+                <div id="step2" style="display: none; text-align: center;">
+                    <p class="payment-subtitle">Checking live availability for <span id="displayDateTime" style="color: #d4af37;"></span>...</p>
+                    <div id="availabilityStatus" style="margin: 20px 0; font-size: 1.2rem; font-weight: bold;"></div>
+                    <button type="button" id="proceedToPayBtn" class="btn btn-primary btn-full" style="display: none;">Pay Booking Advance (₹100)</button>
+                    <button type="button" id="backToStep1Btn" class="payment-cancel">Back</button>
+                </div>
+
+                <div id="step3" style="display: none; text-align: center;">
+                    <h3 style="color: #4CAF50; margin-bottom: 15px;">🎉 Reservation Confirmed!</h3>
+                    <div style="background: #222; padding: 20px; border-radius: 8px; border: 1px dashed #d4af37; text-align: left; margin-bottom: 20px;">
+                        <p><strong>Booking ID:</strong> <span id="receiptBookingId"></span></p>
+                        <p><strong>Name:</strong> <span id="receiptName"></span></p>
+                        <p><strong>Date & Time:</strong> <span id="receiptDateTime"></span></p>
+                        <p><strong>Guests:</strong> <span id="receiptGuests"></span></p>
+                        <hr style="border-color: #333; margin: 10px 0;">
+                        <p style="color: #4CAF50; text-align: center; font-weight: bold;">Payment Verified ✓</p>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #aaa;">A digital receipt has been generated. Please show this at the entrance.</p>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- JS -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/main.js"></script>
 </body>

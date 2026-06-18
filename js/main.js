@@ -112,143 +112,178 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.setAttribute('min', today);
     }
 
-    // 6. Reservation Form Submission with Validation
-    const resForm = document.getElementById('reservationForm');
-    if (resForm) {
-        resForm.addEventListener('submit', async (e) => {
+    // 6. Handle "Reserve a Table" clicks anywhere
+    document.querySelectorAll('a[href="#reserve"]').forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            clearAllErrors();
+            document.getElementById('reservationModal').classList.add('active');
+            // Reset to step 1
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+        });
+    });
 
+    document.getElementById('closeReservationBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('reservationModal').classList.remove('active');
+    });
+
+    // Handle Availability Check
+    const checkBtn = document.getElementById('checkAvailabilityBtn');
+    if (checkBtn) {
+        checkBtn.addEventListener('click', async () => {
             const name = document.getElementById('resName').value.trim();
             const phone = document.getElementById('resPhone').value.trim();
             const date = document.getElementById('resDate').value;
             const time = document.getElementById('resTime').value;
             const guests = document.getElementById('resGuests').value;
+
+            // Basic validation
+            if (!name || !phone || !date || !time || !guests) {
+                alert("Please fill in all required fields (Name, Phone, Date, Time, Guests).");
+                return;
+            }
+
+            // Move to Step 2
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            const displayDate = new Date(date + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+            document.getElementById('displayDateTime').textContent = `${displayDate} at ${time}`;
+            
+            const statusDiv = document.getElementById('availabilityStatus');
+            const payBtn = document.getElementById('proceedToPayBtn');
+            
+            statusDiv.textContent = 'Checking database...';
+            statusDiv.style.color = '#ccc';
+            payBtn.style.display = 'none';
+
+            // Simulate slight network delay for premium feel
+            await new Promise(r => setTimeout(r, 800));
+
+            try {
+                // Check Supabase for existing reservations at this date/time
+                const { data, error } = await supabaseClient
+                    .from('reservations')
+                    .select('id')
+                    .eq('reservation_date', date)
+                    .eq('reservation_time', time);
+
+                if (error) throw error;
+
+                // Simple Capacity Logic: Assume max 10 reservations per time slot
+                if (data && data.length >= 10) {
+                    statusDiv.innerHTML = '<span style="color: #ff4444;">Sorry, this time slot is Fully Booked.</span><br><span style="font-size: 0.9rem; font-weight: normal; color: #aaa;">Please select a different time or date.</span>';
+                } else {
+                    statusDiv.innerHTML = '<span style="color: #4CAF50;">Table Available!</span>';
+                    payBtn.style.display = 'inline-block';
+                }
+            } catch (err) {
+                console.error("Availability check failed:", err);
+                statusDiv.innerHTML = '<span style="color: #ff4444;">Error checking availability. Try again.</span>';
+            }
+        });
+    }
+
+    // Back button in Step 2
+    document.getElementById('backToStep1Btn').addEventListener('click', () => {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step1').style.display = 'block';
+    });
+
+    // Handle Payment (Razorpay Test Mode Integration)
+    const payBtn = document.getElementById('proceedToPayBtn');
+    if (payBtn) {
+        payBtn.addEventListener('click', () => {
+            const name = document.getElementById('resName').value.trim();
+            const phone = document.getElementById('resPhone').value.trim();
+            const email = document.getElementById('resEmail').value.trim();
+            const date = document.getElementById('resDate').value;
+            const time = document.getElementById('resTime').value;
+            const guests = document.getElementById('resGuests').value;
             const requests = document.getElementById('resRequests').value.trim();
+            
+            const bookingAmount = 100 * 100; // Razorpay expects paise (₹100)
+            
+            // Razorpay Options
+            var options = {
+                "key": "rzp_test_placeholderkey", // Test Key
+                "amount": bookingAmount.toString(),
+                "currency": "INR",
+                "name": "The Sky Cafe",
+                "description": "Table Reservation Advance",
+                "image": "https://theskycafe.in/favicon.png",
+                "handler": async function (response) {
+                    // Payment Successful Callback
+                    const paymentId = response.razorpay_payment_id;
+                    const bookingId = 'TSC-' + Math.floor(100000 + Math.random() * 900000); // Generate Random ID
 
-            let isValid = true;
+                    payBtn.textContent = 'Verifying & Reserving...';
+                    payBtn.disabled = true;
 
-            // Name validation
-            if (!name || name.length < 2) {
-                showError('resName', 'nameError', 'Please enter your full name (at least 2 characters).');
-                isValid = false;
-            } else {
-                clearError('resName', 'nameError');
-            }
-
-            // Phone validation (Indian 10-digit number starting with 6-9)
-            const phoneRegex = /^[6-9][0-9]{9}$/;
-            if (!phone) {
-                showError('resPhone', 'phoneError', 'Please enter your phone number.');
-                isValid = false;
-            } else if (!phoneRegex.test(phone)) {
-                showError('resPhone', 'phoneError', 'Enter a valid 10-digit Indian phone number.');
-                isValid = false;
-            } else {
-                clearError('resPhone', 'phoneError');
-            }
-
-            // Date validation
-            const today = new Date().toISOString().split('T')[0];
-            if (!date) {
-                showError('resDate', 'dateError', 'Please select a date.');
-                isValid = false;
-            } else if (date < today) {
-                showError('resDate', 'dateError', 'Date cannot be in the past.');
-                isValid = false;
-            } else {
-                clearError('resDate', 'dateError');
-            }
-
-            // Time validation
-            if (!time) {
-                showError('resTime', 'timeError', 'Please select a time.');
-                isValid = false;
-            } else {
-                clearError('resTime', 'timeError');
-            }
-
-            // Guests validation
-            if (!guests) {
-                showError('resGuests', 'guestsError', 'Please select the number of guests.');
-                isValid = false;
-            } else {
-                clearError('resGuests', 'guestsError');
-            }
-
-            // If all valid, trigger UPI Payment Modal
-            if (isValid) {
-                // --- UPI CONFIGURATION ---
-                const upiID = 'theskycafe@upi'; // The user can easily change this
-                const bookingAmount = '100'; // Booking fee
-                const payeeName = 'The Sky Cafe';
-                
-                // Generate UPI Intent Link and QR Code
-                const upiUrl = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${bookingAmount}&cu=INR&tn=Table Booking`;
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
-
-                // Setup Modal UI
-                const modal = document.getElementById('paymentModal');
-                document.getElementById('paymentAmountDisplay').textContent = `₹${bookingAmount}`;
-                document.getElementById('upiQrCode').src = qrUrl;
-                document.getElementById('payUpiBtn').href = upiUrl;
-
-                // Show Modal
-                modal.classList.add('active');
-
-                // Handle "I have made the payment" click
-                const doneBtn = document.getElementById('paymentDoneBtn');
-                
-                // Clone node to remove old event listeners if user opens modal multiple times
-                const newDoneBtn = doneBtn.cloneNode(true);
-                doneBtn.parentNode.replaceChild(newDoneBtn, doneBtn);
-                
-                newDoneBtn.addEventListener('click', async () => {
-                    newDoneBtn.textContent = 'Processing...';
-                    newDoneBtn.disabled = true;
-
-                    // 1. Save to Supabase with "Payment Pending" status
-                    const { error } = await supabaseClient
-                        .from('reservations')
-                        .insert([
-                            {
+                    try {
+                        // 1. Save to Reservations table
+                        const { data: resData, error: resErr } = await supabaseClient
+                            .from('reservations')
+                            .insert([{
+                                booking_id: bookingId,
                                 customer_name: name,
                                 phone_number: phone,
+                                email: email,
                                 reservation_date: date,
                                 reservation_time: time,
                                 guests: guests,
                                 special_requests: requests,
-                                status: 'Payment Pending'
-                            }
-                        ]);
+                                payment_id: paymentId,
+                                payment_status: 'Paid',
+                                status: 'Confirmed'
+                            }])
+                            .select();
+                        
+                        if (resErr) throw resErr;
 
-                    if (error) {
-                        console.error('Error saving reservation:', error);
-                        alert('Database error. Please contact us directly.');
-                        newDoneBtn.textContent = 'I Have Made the Payment';
-                        newDoneBtn.disabled = false;
-                        return;
+                        // 2. Save to Payments table (if created, ignoring errors if table doesn't exist yet for backwards compatibility)
+                        await supabaseClient.from('payments').insert([{
+                            booking_id: bookingId,
+                            razorpay_payment_id: paymentId,
+                            amount: 100.00,
+                            status: 'Success'
+                        }]);
+
+                        // Show Step 3 (Digital Receipt)
+                        document.getElementById('step2').style.display = 'none';
+                        document.getElementById('step3').style.display = 'block';
+                        
+                        // Populate Receipt
+                        const displayDate = new Date(date + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+                        document.getElementById('receiptBookingId').textContent = bookingId;
+                        document.getElementById('receiptName').textContent = name;
+                        document.getElementById('receiptDateTime').textContent = `${displayDate} at ${time}`;
+                        document.getElementById('receiptGuests').textContent = guests;
+
+                    } catch (err) {
+                        console.error("Database save failed after payment:", err);
+                        alert("Payment successful, but we had trouble saving the reservation. Please contact us with Payment ID: " + paymentId);
                     }
-
-                    // Success!
-                    modal.classList.remove('active');
-                    resForm.reset();
-                    
-                    // Show a nice success message
-                    const successMsg = document.createElement('div');
-                    successMsg.style.cssText = "background: #111; border: 1px solid #d4af37; color: #d4af37; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center;";
-                    successMsg.innerHTML = "<strong>Reservation Request Received!</strong><br>We will verify your payment and send a confirmation shortly.";
-                    resForm.innerHTML = ''; // Clear form UI
-                    resForm.appendChild(successMsg);
-                });
-
-                // Handle Cancel button
-                document.getElementById('cancelPaymentBtn').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    modal.classList.remove('active');
-                });
-            }
+                },
+                "prefill": {
+                    "name": name,
+                    "email": email || "customer@example.com",
+                    "contact": phone
+                },
+                "theme": {
+                    "color": "#d4af37"
+                }
+            };
+            
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response){
+                alert("Payment Failed: " + response.error.description);
+            });
+            rzp1.open();
         });
+    }
 
         // Real-time validation on blur
         document.getElementById('resPhone').addEventListener('blur', function() {

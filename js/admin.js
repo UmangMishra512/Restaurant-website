@@ -101,25 +101,40 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach(res => {
             const tr = document.createElement('tr');
             
-            // Format Date
-            const dateObj = new Date(res.reservation_date);
+            // Format date and time
+            const dateObj = new Date(res.reservation_date + 'T00:00:00');
             const dateStr = dateObj.toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
             
-            // Format Time
-            const timeStr = res.reservation_time.substring(0, 5); // HH:MM
+            const [hours, minutes] = res.reservation_time.split(':');
+            const timeObj = new Date();
+            timeObj.setHours(hours, minutes);
+            const timeStr = timeObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+            // Determine Status Badge
+            let statusBadge = '';
+            if(res.status === 'Pending' || res.status === 'Payment Pending') statusBadge = `<span class="status-badge status-pending">${res.status}</span>`;
+            else if(res.status === 'Confirmed') statusBadge = `<span class="status-badge status-confirmed">Confirmed</span>`;
+            else if(res.status === 'Cancelled') statusBadge = `<span class="status-badge status-cancelled">Cancelled</span>`;
+            else statusBadge = `<span class="status-badge status-confirmed">${res.status}</span>`; // Completed
             
-            // Status Class
-            const statusClass = res.status.toLowerCase() === 'confirmed' ? 'status-confirmed' : 'status-pending';
-            
+            const paymentStatus = res.payment_status || 'Unpaid';
+            const bookingId = res.booking_id || 'N/A';
+
             tr.innerHTML = `
-                <td>${dateStr} <br><span style="color:#a3a3a3; font-size:0.85rem;">${timeStr}</span></td>
-                <td><strong>${res.customer_name}</strong><br><span style="font-size:0.85rem; color:#a3a3a3;">${res.special_requests || 'No requests'}</span></td>
-                <td>${res.phone_number}</td>
-                <td>${res.guests}</td>
-                <td><span class="status-badge ${statusClass}">${res.status}</span></td>
+                <td>${dateStr} <br><small style="color:#aaa;">${timeStr}</small></td>
                 <td>
-                    ${res.status !== 'Confirmed' ? `<button class="action-btn" onclick="updateStatus('${res.id}', 'Confirmed')">Confirm</button>` : ''}
-                    <button class="action-btn" onclick="updateStatus('${res.id}', 'Cancelled')" style="border-color:#ff6b6b; color:#ff6b6b;">Cancel</button>
+                    <strong>${res.customer_name}</strong><br>
+                    <small style="color:#aaa;">${res.phone_number}</small>
+                </td>
+                <td>${res.guests}</td>
+                <td>
+                    ID: ${bookingId}<br>
+                    <small style="color:${paymentStatus === 'Paid' ? '#4CAF50' : '#ff9800'};">${paymentStatus}</small>
+                </td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button class="action-btn btn-confirm" onclick="updateStatus('${res.id}', 'Completed')" title="Mark Completed">✓</button>
+                    <button class="action-btn btn-cancel" onclick="updateStatus('${res.id}', 'Cancelled')" title="Cancel Booking">✕</button>
                 </td>
             `;
             tbody.appendChild(tr);
