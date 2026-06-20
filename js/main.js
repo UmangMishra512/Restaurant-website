@@ -112,21 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.setAttribute('min', today);
     }
 
-    // 6. Handle "Reserve a Table" clicks anywhere
+    // 6. Handle "Reserve a Table" clicks — smooth scroll to section
     document.querySelectorAll('a[href="#reserve"]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('reservationModal').classList.add('active');
-            // Reset to step 1
-            document.getElementById('step1').style.display = 'block';
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'none';
+            document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' });
         });
-    });
-
-    document.getElementById('closeReservationBtn').addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('reservationModal').classList.remove('active');
     });
 
     // Handle Availability Check

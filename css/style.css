@@ -535,6 +535,25 @@ ul {
     font-style: italic;
 }
 
+.booking-sub-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.event-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-step-hint {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
 .booking-form-wrapper {
     background: var(--surface-color);
     backdrop-filter: blur(10px);
