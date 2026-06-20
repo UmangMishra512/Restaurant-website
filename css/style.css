@@ -421,6 +421,7 @@ ul {
 /* --- GALLERY SECTION --- */
 .gallery {
     background: rgba(0,0,0,0.4);
+    overflow: hidden;
 }
 
 

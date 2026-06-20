@@ -333,7 +333,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             cards.forEach((card, i) => {
-                const diff = i - currentIndex;
+                let diff = i - currentIndex;
+                const half = Math.floor(cards.length / 2);
+                if (diff > half) diff -= cards.length;
+                if (diff < -Math.floor((cards.length - 1) / 2)) diff += cards.length;
+
                 const isMobile = window.innerWidth <= 600;
                 
                 const xOffset = isMobile ? 40 : 60; 
@@ -365,19 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateCarousel();
-                }
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                updateCarousel();
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                if (currentIndex < cards.length - 1) {
-                    currentIndex++;
-                    updateCarousel();
-                }
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateCarousel();
             });
         }
 
