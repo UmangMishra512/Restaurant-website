@@ -96,14 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function clearAllErrors() {
-        document.querySelectorAll('.error-msg').forEach(el => {
-            el.textContent = '';
-            el.classList.remove('show');
-        });
-        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-        document.querySelectorAll('.input-success').forEach(el => el.classList.remove('input-success'));
-    }
+
 
     // 5. Set minimum date to today
     const dateInput = document.getElementById('resDate');
@@ -276,23 +269,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        // Real-time validation on blur
-        document.getElementById('resPhone').addEventListener('blur', function() {
+    // Real-time validation on blur
+    const resPhoneEl = document.getElementById('resPhone');
+    if (resPhoneEl) {
+        resPhoneEl.addEventListener('blur', function() {
             const phoneRegex = /^[6-9][0-9]{9}$/;
             if (this.value && !phoneRegex.test(this.value.trim())) {
-                showError('resPhone', 'phoneError', 'Enter a valid 10-digit Indian phone number.');
+                this.classList.add('input-error');
+                this.classList.remove('input-success');
             } else if (this.value) {
-                clearError('resPhone', 'phoneError');
+                this.classList.remove('input-error');
+                this.classList.add('input-success');
             }
         });
+    }
 
-        document.getElementById('resName').addEventListener('blur', function() {
+    const resNameEl = document.getElementById('resName');
+    if (resNameEl) {
+        resNameEl.addEventListener('blur', function() {
             if (this.value && this.value.trim().length < 2) {
-                showError('resName', 'nameError', 'Name must be at least 2 characters.');
+                this.classList.add('input-error');
+                this.classList.remove('input-success');
             } else if (this.value) {
-                clearError('resName', 'nameError');
+                this.classList.remove('input-error');
+                this.classList.add('input-success');
             }
         });
+    }
 
     // --- FAN CAROUSEL LOGIC ---
     const fanCarousel = document.getElementById('fanCarousel');
