@@ -509,6 +509,12 @@ ul {
     gap: 15px;
 }
 
+@media (max-width: 600px) {
+    .event-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 .form-step-hint {
     text-align: center;
     color: var(--text-muted);

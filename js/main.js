@@ -280,6 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (this.value) {
                 this.classList.remove('input-error');
                 this.classList.add('input-success');
+            } else {
+                this.classList.remove('input-error');
+                this.classList.remove('input-success');
             }
         });
     }
@@ -293,6 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (this.value) {
                 this.classList.remove('input-error');
                 this.classList.add('input-success');
+            } else {
+                this.classList.remove('input-error');
+                this.classList.remove('input-success');
             }
         });
     }
@@ -308,7 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentIndex = Math.floor(cards.length / 2);
 
         cards.forEach((_, i) => {
-            const dot = document.createElement('div');
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.setAttribute('aria-label', `Show image ${i + 1} of ${cards.length}`);
             dot.classList.add('fan-dot');
             if(i === currentIndex) dot.classList.add('active');
             dot.addEventListener('click', () => {

@@ -415,12 +415,12 @@
                         
                         <div id="step2" style="display: none; text-align: center;">
                             <p class="form-step-hint">Checking live availability for <span id="displayDateTime" style="color: #d4af37;"></span>...</p>
-                            <div id="availabilityStatus" style="margin: 20px 0; font-size: 1.2rem; font-weight: bold;"></div>
+                            <div id="availabilityStatus" style="margin: 20px 0; font-size: 1.2rem; font-weight: bold;" role="status" aria-live="polite"></div>
                             <button type="button" id="proceedToPayBtn" class="btn btn-primary btn-full" style="display: none;">Pay Booking Advance (₹100)</button>
                             <button type="button" id="backToStep1Btn" class="btn btn-outline" style="margin-top: 10px;">Back</button>
                         </div>
 
-                        <div id="step3" style="display: none; text-align: center;">
+                        <div id="step3" style="display: none; text-align: center;" role="status" aria-live="polite">
                             <h3 style="color: #4CAF50; margin-bottom: 15px;">🎉 Reservation Confirmed!</h3>
                             <div style="background: #222; padding: 20px; border-radius: 8px; border: 1px dashed #d4af37; text-align: left; margin-bottom: 20px;">
                                 <p><strong>Booking ID:</strong> <span id="receiptBookingId"></span></p>
