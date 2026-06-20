@@ -288,18 +288,20 @@
                 <h2 class="section-title">Moments at Sky Cafe</h2>
                 <p>Catch a glimpse of the memories we create.</p>
             </div>
-            <div class="gallery-grid">
-                <div class="gallery-item scroll-reveal">
-                    <img src="images/indoor_seating.png" alt="The Sky Cafe Indoor Seating Area" loading="lazy">
+            <div class="fan-carousel-wrapper scroll-reveal">
+                <div class="fan-carousel-cards" id="fanCarousel">
+                    <img src="images/indoor_seating.png" alt="The Sky Cafe Indoor Seating" class="fan-card" loading="lazy">
+                    <img src="images/biryani.png" alt="Delicious Biryani" class="fan-card" loading="lazy">
+                    <img src="images/rooftop_party.png" alt="Rooftop Party Setup" class="fan-card" loading="lazy">
+                    <img src="images/pizza.png" alt="Wood-fired Pizza" class="fan-card" loading="lazy">
+                    <img src="images/rooftop_night2.png" alt="Night Ambiance" class="fan-card" loading="lazy">
+                    <img src="images/oreo_shake.png" alt="Oreo Shake" class="fan-card" loading="lazy">
+                    <img src="images/signboard.png" alt="Sky Cafe Signboard" class="fan-card" loading="lazy">
                 </div>
-                <div class="gallery-item scroll-reveal delay-1">
-                    <img src="images/rooftop_party.png" alt="Rooftop Party Setup at The Sky Cafe" loading="lazy">
-                </div>
-                <div class="gallery-item scroll-reveal">
-                    <img src="images/signboard.png" alt="The Sky Cafe Signboard at Night" loading="lazy">
-                </div>
-                <div class="gallery-item scroll-reveal delay-1">
-                    <img src="images/rooftop_night2.png" alt="The Sky Cafe Rooftop Night Ambiance" loading="lazy">
+                <div class="fan-controls">
+                    <button class="fan-btn" id="fanPrev" aria-label="Previous image">&lt;</button>
+                    <div class="fan-dots" id="fanDots"></div>
+                    <button class="fan-btn" id="fanNext" aria-label="Next image">&gt;</button>
                 </div>
             </div>
         </div>

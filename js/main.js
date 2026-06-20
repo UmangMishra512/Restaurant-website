@@ -302,4 +302,84 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError('resName', 'nameError');
             }
         });
+
+    // --- FAN CAROUSEL LOGIC ---
+    const fanCarousel = document.getElementById('fanCarousel');
+    if (fanCarousel) {
+        const cards = Array.from(fanCarousel.querySelectorAll('.fan-card'));
+        const prevBtn = document.getElementById('fanPrev');
+        const nextBtn = document.getElementById('fanNext');
+        const dotsContainer = document.getElementById('fanDots');
+        
+        let currentIndex = Math.floor(cards.length / 2);
+
+        cards.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('fan-dot');
+            if(i === currentIndex) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateCarousel();
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateCarousel() {
+            const dots = dotsContainer.querySelectorAll('.fan-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+
+            cards.forEach((card, i) => {
+                const diff = i - currentIndex;
+                const isMobile = window.innerWidth <= 600;
+                
+                const xOffset = isMobile ? 40 : 60; 
+                const rotateOffset = isMobile ? 4 : 5;
+                
+                if (diff === 0) {
+                    card.style.transform = `translateX(0) rotate(0deg) scale(1)`;
+                    card.style.zIndex = 10;
+                    card.style.opacity = 1;
+                } else {
+                    const absDiff = Math.abs(diff);
+                    const direction = diff > 0 ? 1 : -1;
+                    
+                    const translateX = direction * (xOffset * absDiff);
+                    const rotate = direction * (rotateOffset * absDiff);
+                    const scale = 1 - (0.05 * absDiff);
+                    
+                    if (absDiff > 3) {
+                        card.style.opacity = 0;
+                    } else {
+                        card.style.opacity = 1;
+                    }
+
+                    card.style.transform = `translateX(${translateX}%) rotate(${rotate}deg) scale(${scale})`;
+                    card.style.zIndex = 10 - absDiff;
+                }
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < cards.length - 1) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+        }
+
+        updateCarousel();
+        window.addEventListener('resize', updateCarousel);
+    }
 });
